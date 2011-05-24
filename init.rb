@@ -1,4 +1,4 @@
-module SendGridParse
+module SendgridParse
   class Init < Sinatra::Base
   
     post '/' do 
