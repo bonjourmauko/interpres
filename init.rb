@@ -6,7 +6,7 @@ module SendgridParse
     end
     
     get '/email_list' do
-      
+      "Hello"
     end
 
   end
