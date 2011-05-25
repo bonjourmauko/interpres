@@ -19,7 +19,8 @@ module SendgridParse
     
     post '/emails' do
       begin
-        href = params[:html].scan(/https\:\/\/docs.google.com\/[a-z]\/.*?\/document\/[a-z]\/.*?\/edit/).first rescue nil
+        #href = params[:html].scan(/https\:\/\/docs.google.com\/[a-z]\/.*?\/document\/[a-z]\/.*?\/edit/).first rescue nil
+        href = params[:html].scan(/https\:\/\/docs.google.com\/(.*?)\/edit/).first rescue nil
         Email.create!(:from => params[:from], :href => href).to_json
       rescue => e
         error 500, e.message.to_json
