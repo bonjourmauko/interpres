@@ -17,7 +17,7 @@ module SendgridParse
       begin
         href = params[:html].scan(/https\:\/\/docs.google.com\/[a-z]\/.*?\/document\/[a-z]\/.*?\/edit/)
         if href
-          @email = Email.create!( :href => href.to_s )
+          @email = Email.create!( :href => href.first )
           status 200
         
         #if params[:from] && params[:to] && params[:subject] && params[:html]
