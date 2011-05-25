@@ -24,7 +24,7 @@ module SendgridParse
         body = {}
         params = request.params
         params.each do |key, value|
-          eval "body[:#{key}] = #{value}"
+          eval "body[:#{key}] = #{value}" rescue eval "body[:#{key}] = JSON.parse #{value}"
         end
         Email.create!(:body => body)
       rescue => e
