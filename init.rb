@@ -19,12 +19,8 @@ module SendgridParse
     
     post '/emails' do
       begin
-        html = Nokogiri::HTML params[:html]
-        html.css('a').each do |a|
-          unless a['href'].scan("edit").empty?
-            return Email.create!(:from => params[:from], :href => a['href']).to_json
-          end
-        end
+        req = SendgridParse::Wrapper.new params
+        Email.create!(:from => req.from, :href => req.href).to_json
       rescue => e
         error 500, e.message.to_json
       end
