@@ -17,15 +17,6 @@ module SendgridParse
       content_type :json
     end
     
-    post '/emails' do
-      begin
-        req = SendgridParse::Wrapper.new params
-        Email.create!(:from => req.from, :href => req.href).to_json
-      rescue => e
-        error 500, e.message.to_json
-      end
-    end
-    
     get '/emails' do
       Email.all.to_json
     end
@@ -33,6 +24,15 @@ module SendgridParse
     get '/emails/:id' do
       begin
         Email.find(params[:id]).to_json
+      rescue => e
+        error 500, e.message.to_json
+      end
+    end
+    
+    post '/emails' do
+      begin
+        req = SendgridParse::Wrapper.new params
+        Email.create!(:from => req.from, :href => req.href).to_json
       rescue => e
         error 500, e.message.to_json
       end
