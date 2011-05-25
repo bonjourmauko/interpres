@@ -15,14 +15,8 @@ GEM
     builder (2.1.2)
     haml (3.1.1)
     i18n (0.5.0)
-    mail (2.2.19)
-      activesupport (>= 2.3.6)
-      i18n (>= 0.4.0)
-      mime-types (~> 1.16)
-      treetop (~> 1.4.8)
-    mime-types (1.16)
     mysql2 (0.2.7)
-    polyglot (0.3.1)
+    nokogiri (1.4.4)
     rack (1.3.0)
     sinatra (1.2.6)
       rack (~> 1.1)
@@ -30,8 +24,6 @@ GEM
     sinatra-activerecord (0.1.3)
       sinatra (>= 0.9.4)
     tilt (1.3.1)
-    treetop (1.4.9)
-      polyglot (>= 0.3.1)
     tzinfo (0.3.27)
     yajl-ruby (0.8.2)
 
@@ -41,8 +33,8 @@ PLATFORMS
 DEPENDENCIES
   activerecord
   haml
-  mail
   mysql2 (< 0.3)
+  nokogiri
   sinatra
   sinatra-activerecord
   yajl-ruby
