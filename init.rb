@@ -17,15 +17,17 @@ module SendgridParse
       begin
         if params[:from] && params[:to] && params[:subject] && params[:html]
           html = Nokogiri::HTML params[:html]
-          link = html.css("a").first
-          href = link['href']
-        
-          @email = Email.create!(:body => {
-            :from     => params[:from],
-            :to       => params[:to],
-            :subject  => params[:subject],
-            :href     => href
-          })
+          html.css("a").each do |a|
+            if a.content.scan(/https\:\/\/docs.google.com\/[a-z]\/.*?\/document\/[a-z]\/.*?\/edit/)
+              @email = Email.create!(:body => {
+                :from     => params[:from],
+                :to       => params[:to],
+                :subject  => params[:subject],
+                :href     => a['href']
+              })
+              return
+            end
+          end
         else
           error 400
         end
