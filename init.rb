@@ -19,10 +19,8 @@ module SendgridParse
     
     post '/emails' do
       begin
-        href = params[:html].scan(/https\:\/\/docs.google.com\/[a-z]\/.*?\/document\/[a-z]\/.*?\/edit/) rescue nil
-        email = Email.create!(:href => href.first) rescue nil
-        return email.to_json if email
-        error 400
+        href = params[:html].scan(/https\:\/\/docs.google.com\/[a-z]\/.*?\/document\/[a-z]\/.*?\/edit/).first rescue nil
+        Email.create!(:from => params[:from], :href => href).to_json
       rescue => e
         error 500, e.message.to_json
       end
@@ -34,9 +32,7 @@ module SendgridParse
     
     get '/emails/:id' do
       begin
-        email = Email.find(params[:id]) rescue nil
-        return email.to_json if email
-        error 404, {:email => {}}.to_json
+        Email.find(params[:id]).to_json
       rescue => e
         error 500, e.message.to_json
       end
