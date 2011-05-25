@@ -21,11 +21,11 @@ module SendgridParse
     
     post '/emails' do
       begin
-        body = {}
+        body = { :html => params[:html] }
         #params = request.params
-        params.each do |key, value|
-          eval "body[:#{key}] = #{value}"
-        end
+        #params.each do |key, value|
+        #  eval "body[:#{key}] = #{value}"
+        #end
         Email.create!(:body => body)
       rescue => e
         error 500, e.message.to_json
