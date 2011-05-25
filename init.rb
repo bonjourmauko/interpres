@@ -13,7 +13,11 @@ module SendgridParse
     
     post '/emails' do 
       begin
-        Email.create!( :body => request.body.read )
+        string = ""
+        request.body.each do |var|
+          string += var.to_s
+        end
+        Email.create!( :body => string )
       rescue => e
         error 500, e.message.to_json
       end
