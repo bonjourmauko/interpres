@@ -23,7 +23,7 @@ module SendgridParse
         if href
           @email = Email.create!( :href => href.first )
         else
-          status 400
+          error 400
         end
       rescue => e
         error 500, e.message.to_json
@@ -35,11 +35,15 @@ module SendgridParse
     end
     
     get '/emails/:id' do
-      @email = Email.find(params[:id])
-      if @email
-        @email.to_json
-      else
-        status 404
+      begin
+        @email = Email.find(params[:id])
+        if @email
+          @email.to_json
+        else
+          error 404
+        end
+      rescue => e
+        error 500, e.message.to_json
       end
     end
         
