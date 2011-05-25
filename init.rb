@@ -11,13 +11,22 @@ module SendgridParse
       ActiveRecord::Base.establish_connection(databases[env])
     end
     
-    post '/emails' do 
+    #post '/emails' do 
+    #  begin
+    #    Email.create!( :body => env['request.form_vars'] )
+    #  rescue => e
+    #    error 500, e.message.to_json
+    #  end
+    #end
+    
+    post '/emails' do
       begin
-        string = ""
-        request.body.each do |var|
-          string += var.to_s
+        body = {}
+        params = request.params
+        params.each do |key, value|
+          eval "body[:#{key}] = #{value}"
         end
-        Email.create!( :body => string )
+        Email.create!(:body => body)
       rescue => e
         error 500, e.message.to_json
       end
