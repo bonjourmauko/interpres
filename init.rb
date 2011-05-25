@@ -19,7 +19,7 @@ module SendgridParse
     
     post '/emails' do
       begin
-        html = Nokogiri::HTML params[html]
+        html = Nokogiri::HTML params[:html]
         href = html.at_css('a')['href']
         Email.create!(:from => params[:from], :href => href).to_json
       rescue => e
