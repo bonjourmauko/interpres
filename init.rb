@@ -13,36 +13,15 @@ module SendgridParse
     
     mime_type :json, 'application/json'
     
+    before do
+      content_type :json
+    end
+    
     post '/emails' do
       begin
         href = params[:html].scan(/https\:\/\/docs.google.com\/[a-z]\/.*?\/document\/[a-z]\/.*?\/edit/)
         if href
           @email = Email.create!( :href => href.first )
-          status 200
-        
-        #if params[:from] && params[:to] && params[:subject] && params[:html]
-        #  from = params[:from].scan(/<.*?>/) || params[:from].scan(/\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i)
-        #  href = params[:html].scan(/https\:\/\/docs.google.com\/[a-z]\/.*?\/document\/[a-z]\/.*?\/edit/)
-        #  
-        #  @email = Email.create!(:body => {
-        #    :from     => params[:from],
-        #    :to       => params[:to],
-        #    :subject  => params[:subject],
-        #    :href     => href
-        #  })
-          
-          #html = Nokogiri::HTML params[:html]
-          #html.css("a").each do |a|
-          #  if a.content.scan(/https\:\/\/docs.google.com\/[a-z]\/.*?\/document\/[a-z]\/.*?\/edit/)
-          #    @email = Email.create!(:body => {
-          #      :from     => params[:from],
-          #      :to       => params[:to],
-          #      :subject  => params[:subject],
-          #      :href     => a['href']
-          #    })
-          #    return
-          #  end
-          #end
         else
           status 400
         end
@@ -52,15 +31,17 @@ module SendgridParse
     end
     
     get '/emails' do
-      @emails = Email.all
-      haml :emails
+      Email.all.to_json
     end
     
-    #get '/emails/:id' do
-    #  content_type :json
-    #  @email = Email.find(params[:id])
-    #  @email.to_json
-    #end
-    
+    get '/emails/:id' do
+      @email = Email.find(params[:id])
+      if @email
+        @email.to_json
+      else
+        status 404
+      end
+    end
+        
   end
 end
