@@ -22,22 +22,10 @@ module SendgridParse
     post '/emails' do
       begin
         body = {}
-        @params = env['rack.request.form_vars']
-        
-        body[:text]         = @params["text"]                rescue nil
-        body[:html]         = @params["html"]                rescue nil
-        body[:from]         = @params["from"]                rescue nil
-        body[:to]           = @params["to"]                  rescue nil
-        body[:cc]           = @params["cc"]                  rescue nil
-        body[:subject]      = @params["subject"]             rescue nil
-        body[:dkim]         = JSON.parse @params["dkim"]     rescue nil
-        body[:spf]          = @params["SPF"]                 rescue nil
-        body[:envelope]     = JSON.parse @params["envelope"] rescue nil
-        body[:charsets]     = JSON.parse @params["charsets"] rescue nil
-        body[:spam_score]   = @params["spam_score"]          rescue nil
-        body[:spam_report]  = @params["spam_report"]         rescue nil
-        body[:attachments]  = @params["attachments"]         rescue nil
-        
+        #params = request.params
+        params.each do |key, value|
+          eval "body[:#{key}] = #{value}"
+        end
         Email.create!(:body => body)
       rescue => e
         error 500, e.message.to_json
