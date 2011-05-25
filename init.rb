@@ -20,7 +20,7 @@ module SendgridParse
     post '/emails' do
       begin
         html = Nokogiri::HTML params[:html]
-        html.css('a') do |a|
+        html.css('a').each do |a|
           unless a['href'].scan("edit").empty?
             return Email.create!(:from => params[:from], :href => a['href']).to_json
           end
