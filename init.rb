@@ -11,22 +11,24 @@ module SendgridParse
       ActiveRecord::Base.establish_connection(databases[env])
     end
     
-    #post '/emails' do 
-    #  begin
-    #    Email.create!( :body => env['request.form_vars'] )
-    #  rescue => e
-    #    error 500, e.message.to_json
-    #  end
-    #end
+    mime_type :json, 'application/json'
     
     post '/emails' do
       begin
-        body = { :html => params[:html] }
-        #params = request.params
-        #params.each do |key, value|
-        #  eval "body[:#{key}] = #{value}"
-        #end
-        Email.create!(:body => body)
+        if params[:from] && params[:to] && params[:subject] && params[:html]
+          html = Nokogiri::HTML params[:html]
+          link = html.css("a").first
+          href = link['href']
+        
+          @email = Email.create!(:body => {
+            :from     => params[:from],
+            :to       => params[:to],
+            :subject  => params[:subject],
+            :href     => href
+          })
+        else
+          error 400
+        end
       rescue => e
         error 500, e.message.to_json
       end
@@ -36,6 +38,12 @@ module SendgridParse
       @emails = Email.all
       haml :emails
     end
-
+    
+    #get '/emails/:id' do
+    #  content_type :json
+    #  @email = Email.find(params[:id])
+    #  @email.to_json
+    #end
+    
   end
 end
