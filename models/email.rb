@@ -1,3 +1,3 @@
 class Email < ActiveRecord::Base
-  serialize :body
+  #serialize :body
 end

@@ -15,21 +15,36 @@ module SendgridParse
     
     post '/emails' do
       begin
-        if params[:from] && params[:to] && params[:subject] && params[:html]
-          html = Nokogiri::HTML params[:html]
-          html.css("a").each do |a|
-            if a.content.scan(/https\:\/\/docs.google.com\/[a-z]\/.*?\/document\/[a-z]\/.*?\/edit/)
-              @email = Email.create!(:body => {
-                :from     => params[:from],
-                :to       => params[:to],
-                :subject  => params[:subject],
-                :href     => a['href']
-              })
-              return
-            end
-          end
+        href = params[:html].scan(/https\:\/\/docs.google.com\/[a-z]\/.*?\/document\/[a-z]\/.*?\/edit/)
+        if href
+          @email = Email.create!( :href => href.to_s )
+          status 200
+        
+        #if params[:from] && params[:to] && params[:subject] && params[:html]
+        #  from = params[:from].scan(/<.*?>/) || params[:from].scan(/\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i)
+        #  href = params[:html].scan(/https\:\/\/docs.google.com\/[a-z]\/.*?\/document\/[a-z]\/.*?\/edit/)
+        #  
+        #  @email = Email.create!(:body => {
+        #    :from     => params[:from],
+        #    :to       => params[:to],
+        #    :subject  => params[:subject],
+        #    :href     => href
+        #  })
+          
+          #html = Nokogiri::HTML params[:html]
+          #html.css("a").each do |a|
+          #  if a.content.scan(/https\:\/\/docs.google.com\/[a-z]\/.*?\/document\/[a-z]\/.*?\/edit/)
+          #    @email = Email.create!(:body => {
+          #      :from     => params[:from],
+          #      :to       => params[:to],
+          #      :subject  => params[:subject],
+          #      :href     => a['href']
+          #    })
+          #    return
+          #  end
+          #end
         else
-          error 400
+          status 400
         end
       rescue => e
         error 500, e.message.to_json
