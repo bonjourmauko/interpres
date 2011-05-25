@@ -1,3 +1,3 @@
 %h1 wena
 - @emails.each do |email|
-  %p= email.body
+  %p= email.body.to_json
