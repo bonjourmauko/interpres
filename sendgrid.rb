@@ -23,7 +23,7 @@ module Interpres
       #               If attachments is 3, parameters attachment1, attachment2, and attachment3 will have file uploads.
       #               TNEF files (winmail.dat) will be extracted and have any attachments posted.
 
-      def initialize
+      def initialize(params)
         params.each do |key, value|
           instance_variable_set("@#{key}", "#{value}")
           ParseApi.define_param key
