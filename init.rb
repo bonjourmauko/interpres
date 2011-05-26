@@ -34,7 +34,7 @@ module Interpres
     
     post '/emails' do
 #      begin
-        req = Interpres::Sendgrid::ParseApi.new params
+        req = Interpres::Sendgrid::ParseApi.new
         Email.create!(:from => req.from, :href => req.href).to_json
 #      rescue => e
 #        error 500, e.message.to_json
