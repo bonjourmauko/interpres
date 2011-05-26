@@ -3,7 +3,6 @@ module Interpres
     class ParseApi
       
       ## Possible params | source: http://wiki.sendgrid.com/doku.php?id=parse_api
-
       # text          Text body of email. If not set, email did not have a text body.
       # html          HTML body of email. If not set, email did not have an HTML body.
       # from          Email sender, as taken from the message headers
@@ -25,7 +24,7 @@ module Interpres
 
       def initialize(params)
         params.each do |key, value|
-          key.to_s.gsub!("-", "_")
+          key = key.dup.gsub(/[^a-z0-9]+/i, '_').downcase
           instance_variable_set("@#{key}", "#{value}")
           ParseApi.define_accessor(key, value)
         end
