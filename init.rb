@@ -25,20 +25,20 @@ module Interpres
     end
     
     get '/emails/:id' do
-      begin
+#      begin
         Email.find(params[:id]).to_json
-      rescue => e
-        error 500, e.message.to_json
-      end
+#      rescue => e
+#        error 500, e.message.to_json
+#      end
     end
     
     post '/emails' do
-      begin
+#      begin
         req = Interpres::Sendgrid::ParseApi.new params
         Email.create!(:from => req.from, :href => req.href).to_json
-      rescue => e
-        error 500, e.message.to_json
-      end
+#      rescue => e
+#        error 500, e.message.to_json
+#      end
     end
         
   end
