@@ -24,7 +24,7 @@ module Interpres
       #               TNEF files (winmail.dat) will be extracted and have any attachments posted.
 
       def initialize
-        env['rack.request.form_hash'].each do |key, value|
+        params.each do |key, value|
           instance_variable_set("@#{key}", "#{value}")
           ParseApi.define_param key
         end
