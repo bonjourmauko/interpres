@@ -2,7 +2,7 @@ require 'yajl/json_gem'
 require 'sinatra/activerecord'
 require 'models/email'
 
-module SendgridParse  
+module Interpres  
   class Init < Sinatra::Base
     
     configure do
@@ -31,7 +31,7 @@ module SendgridParse
     
     post '/emails' do
       begin
-        req = SendgridParse::Wrapper.new params
+        req = Interpres::Sendgrid.new params
         Email.create!(:from => req.from, :href => req.href).to_json
       rescue => e
         error 500, e.message.to_json

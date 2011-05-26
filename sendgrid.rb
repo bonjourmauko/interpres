@@ -1,5 +1,5 @@
-module SendgridParse
-  class Wrapper
+module Interpres
+  class Sendgrid
     
     ## Possible params | source: http://wiki.sendgrid.com/doku.php?id=parse_api
 
@@ -25,7 +25,7 @@ module SendgridParse
     def initalize(params)
       params.each do |key, value|
         instance_variable_set("@#{key}", "#{value}")
-        Wrapper.define_param key
+        Sendgrid.define_param key
       end
     end
     
