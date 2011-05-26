@@ -27,12 +27,12 @@ module Interpres
         params.each do |key, value|
           key.to_s.gsub!("-", "_")
           instance_variable_set("@#{key}", "#{value}")
-          ParseApi.define_param key
+          ParseApi.define_accessor(key, value)
         end
       end
     
-      def self.define_param(key)
-        define_method(key) { "@#{key}" }
+      def self.define_accessor(key, value)
+        define_method(key) { value }
       end
     
       # refactor
