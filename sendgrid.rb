@@ -25,6 +25,7 @@ module Interpres
 
       def initialize(params)
         params.each do |key, value|
+          key.gsub!("-", "_")
           instance_variable_set("@#{key}", "#{value}")
           ParseApi.define_param key
         end
