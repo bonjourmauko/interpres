@@ -20,6 +20,10 @@ module Interpres
       content_type :json
     end
     
+    get '/' do
+      raise "Sinatra has left the building"
+    end
+    
     get '/emails' do
       Email.all.to_json
     end
