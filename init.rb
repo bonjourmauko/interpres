@@ -1,10 +1,13 @@
 require 'yajl/json_gem'
 require 'sinatra/activerecord'
+require 'config/hoptoad'
 require 'models/email'
 require 'sendgrid'
 
 module Interpres  
   class Init < Sinatra::Base
+    use HoptoadNotifier::Rack
+    enable :raise_errors
     
     configure do
       env = ENV['SINATRA_ENV'] || 'development'
