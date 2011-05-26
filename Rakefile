@@ -1,7 +1,5 @@
 require 'init'
 require 'sinatra/activerecord/rake'
-require 'hoptoad_notifier'
-
 
 task :environment do
   env = ENV['SINATRA_ENV'] || 'development'
