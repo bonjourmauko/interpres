@@ -5,8 +5,6 @@ require 'sendgrid'
 
 module Interpres  
   class Init < Sinatra::Base
-    #use HoptoadNotifier::Rack
-    #enable :raise_errors
     
     configure do
       env = ENV['SINATRA_ENV'] || 'development'
@@ -28,19 +26,19 @@ module Interpres
       begin
         Email.find(params[:id]).to_json
       rescue => e
-        HoptoadNotifier.notify e
         error 500, e.message.to_json
       end
     end
     
     post '/emails' do
-      begin
-        req = Interpres::Sendgrid::ParseApi.new params
-        Email.create!(:from => req.from, :href => req.href).to_json
-      rescue => e
-        HoptoadNotifier.notify e
-        error 500, e.message.to_json
-      end
+      status 200, 'success'
+      #begin
+      #  req = Interpres::Sendgrid::ParseApi.new params
+      #  Email.create!(:from => req.from, :href => req.href).to_json
+      #rescue => e
+      #  HoptoadNotifier.notify e
+      #  error 500, e.message.to_json
+      #end
     end
         
   end
