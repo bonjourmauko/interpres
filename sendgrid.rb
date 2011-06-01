@@ -26,7 +26,7 @@ module Interpres
         params.each do |key, value|
           key = key.dup.gsub(/[^a-z0-9]+/i, '_').downcase
           instance_variable_set("@#{key}", "#{value}")
-          Parse.define_accessor(key, value)
+          ParseEmail.define_accessor(key, value)
         end
       end
     
