@@ -1,4 +1,4 @@
-module Interpress
+module Interpres
   module Tapir
   
     def self.send_source(params)
