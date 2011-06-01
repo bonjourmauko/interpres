@@ -3,7 +3,7 @@ module Interpres
     class Resource
       BASE_URLS = {
         :auth     => 'https://www.google.com/accounts/ClientLogin',
-        :retrieve => 'https://docs.google.com/feeds/default/private/full/',
+        :fetch    => 'https://docs.google.com/feeds/default/private/full/',
         :download => 'https://docs.google.com/feeds/download/documents/export/Export'
       }
       
@@ -36,7 +36,7 @@ module Interpres
         response.strip.to_a.last.split("=").last
       end
       
-      #def retrieve(id)
+      #def retrieve(resource_id)
       #  url = URLS[:retrieve] + id
       #  params = { 'alt' => 'json' }
       #  response = Nestful.send(:get, url, :headers => @@headers, :params => params)
@@ -59,14 +59,40 @@ module Interpres
       
       def download(resource_id)
         params = { 'id' => resource_id, 'exportFormat' => 'html' }
-        html = Nestful.send(:get, BASE_URLS[:download], :headers => @@headers, :params => params).to_s
+        html = Nestful.send(:get, BASE_URLS[:download], :headers => @@headers, :params => params)
         output = {
           :title  => html.scan(/<title.*?>(.*)<\/title>/)[0][0],
           :style  => html.scan(/<style.*?>(.*)<\/style>/)[0][0],
           :body   => html.scan(/<body.*?>(.*)<\/body>/)[0][0]
         }
       end
+    end  
+    
+    class Folder < Interpres::Google::Resource
+      def initialize
+        super
+      end
       
-    end    
+      def title(resource_id)
+        url = "#{BASE_URLS[:fetch]}#{resource_id}"
+        params = { 'alt' => 'json' }
+        JSON.parse(Nestful.send(:get, url, :headers => @@headers, :params => params))['entry']['title']['$t']
+      end
+      
+      def contents(resource_id)
+        url = "#{BASE_URLS[:fetch]}#{resource_id}/contents"
+        params = { 'alt' => 'json' }
+        output = { :title => title(resource_id), :entry => [] }
+        contents = JSON.parse(Nestful.send(:get, url, :headers => @@headers, :params => params))['feed']['entry']
+        contents.each do |entry| 
+          output[:entry] << 
+          { 
+            :resource_id => entry["gd$resourceId"]['$t'].split(":").last, 
+            :title => entry["title"]['$t']
+          }
+        end
+        output
+      end
+    end
   end
 end

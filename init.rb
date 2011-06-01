@@ -49,18 +49,17 @@ module Interpres
       end
     end
     
-    get '/collection/:resource_id/contents' do
+    get '/folder/:resource_id/contents' do
       begin
+        response = Interpres::Google::Folder.new.contents(params[:resource_id]).to_json
         callback = params.delete('callback')
         if callback
           content_type :js
-          return "#{callback}(#{params.to_json})" 
+          "#{callback}(#{response})" 
         else
-          content_type :json
-          return params.to_json
+          response  
         end
       rescue => e
-        content_type :json
         HoptoadNotifier.notify e
         error 500, e.message.to_json
       end
