@@ -38,7 +38,7 @@ module Interpres
         callback = params.delete('callback')
         if callback
           content_type :js
-          return "#{callback}(#{params.json})" 
+          return "#{callback}(#{params.to_json})" 
         else
           content_type :json
           return params.to_json
