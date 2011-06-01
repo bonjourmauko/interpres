@@ -75,7 +75,7 @@ module Interpres
     
     post '/resources' do
       begin
-        response = Interpres::Sendgrid::ParseApi.new params
+        response = Interpres::Sendgrid::ParseEmail.new params
         Resource.create!(:resource_id => response.resource_id).to_json
     #    resp = Interpress::Google::Document.new.retrieve(req.href).to_json
     #    Nestful.send(:post, "/path/to/tapir", :params => resp)

@@ -1,6 +1,6 @@
 module Interpres
   module Sendgrid
-    class Parse
+    class ParseEmail
       
       ## Possible params | source: http://wiki.sendgrid.com/doku.php?id=parse_api
       # text          Text body of email. If not set, email did not have a text body.
