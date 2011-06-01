@@ -35,8 +35,14 @@ module Interpres
     
     get '/document/:id/download' do
       begin
-        content_type :json
-        params.to_json
+        callback = params.delete('callback')
+        if callback
+          content_type :js
+          return "#{callback}(#{params.json})" 
+        else
+          content_type :json
+          return params.to_json
+        end
       rescue => e
         content_type :json
         HoptoadNotifier.notify e
