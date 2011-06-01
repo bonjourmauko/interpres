@@ -2,6 +2,7 @@ require 'yajl/json_gem'
 require 'sinatra/activerecord'
 require 'models/email'
 require 'sendgrid'
+require 'google_docs'
 
 module Interpres  
   class Init < Sinatra::Base
@@ -13,33 +14,58 @@ module Interpres
     end
     
     mime_type :json, 'application/json'
+    mime_type :js,   'text/javascript'
     
-    before do
-      content_type :json
-    end
     
-    get '/emails' do
-      Email.all.to_json
-    end
+    #before do
+    #  content_type :json
+    #end
     
-    get '/emails/:id' do
+    #get '/emails' do
+    #  Email.all.to_json
+    #end
+    
+    #get '/emails/:id' do
+    #  begin
+    #    Email.find(params[:id]).to_json
+    #  rescue => e
+    #    error 500, e.message.to_json
+    #  end
+    #end
+    
+    get '/resource/document/:id/download' do
       begin
-        Email.find(params[:id]).to_json
+        content_type :json
+        params.to_json
       rescue => e
+        content_type :json
+        HoptoadNotifier.notify e
         error 500, e.message.to_json
       end
     end
     
-    post '/emails' do
-      status 200, 'success'
-      #begin
-      #  req = Interpres::Sendgrid::ParseApi.new params
-      #  Email.create!(:from => req.from, :href => req.href).to_json
-      #rescue => e
-      #  HoptoadNotifier.notify e
-      #  error 500, e.message.to_json
-      #end
+    get '/resource/folder/:id/contents' do
+      begin
+        content_type :json
+        params.to_json
+      rescue => e
+        content_type :json
+        HoptoadNotifier.notify e
+        error 500, e.message.to_json
+      end
     end
+    
+    #post '/emails' do
+    #  begin
+    #    req = Interpres::Sendgrid::ParseApi.new params
+    #    #Email.create!(:from => req.from, :href => req.href).to_json
+    #    resp = Interpress::Google::Document.new.retrieve(req.href).to_json
+    #    Nestful.send(:post, "/path/to/tapir", :params => resp)
+    #  rescue => e
+    #    HoptoadNotifier.notify e
+    #    error 500, e.message.to_json
+    #  end
+    #end
         
   end
 end

@@ -1,6 +1,6 @@
 module Interpres
   module Sendgrid
-    class ParseApi
+    class Parse
       
       ## Possible params | source: http://wiki.sendgrid.com/doku.php?id=parse_api
       # text          Text body of email. If not set, email did not have a text body.
@@ -26,7 +26,7 @@ module Interpres
         params.each do |key, value|
           key = key.dup.gsub(/[^a-z0-9]+/i, '_').downcase
           instance_variable_set("@#{key}", "#{value}")
-          ParseApi.define_accessor(key, value)
+          Parse.define_accessor(key, value)
         end
       end
     
