@@ -39,15 +39,14 @@ module Interpres
       def retrieve(resource_id)
         url = BASE_URLS[:fetch] + resource_id
         params = { 'alt' => 'json' }
-        response = Nestful.send(:get, url, :headers => @@headers, :params => params)
-        resource = JSON.parse(response['feed']['entry'][0] ? response['feed']['entry'][0] : response['entry'])
+        resource = JSON.parse Nestful.send(:get, url, :headers => @@headers, :params => params)
         output = {
-          :user_name      => resource['author'].first['name']['$t'],
-          :user_email     => resource['author'].first['email']['$t'],
-          :resource_id    => resource['gd$resourceId']['$t'].split(":").last,
-          :resource_type  => resource['gd$resourceId']['$t'].split(":").first, # document or folder
-          :resource_title => resource['title']['$t'],
-          :resource_lang  => resource['link'][1]['href'].split("hl=").last.gsub(/\_.*/, "")
+          :user_name      => resource['entry']['author'].first['name']['$t'],
+          :user_email     => resource['entry']['author'].first['email']['$t'],
+          :resource_id    => resource['entry']['gd$resourceId']['$t'].split(":").last,
+          :resource_type  => resource['entry']['gd$resourceId']['$t'].split(":").first, # document or folder
+          :resource_title => resource['entry']['title']['$t']#,
+          #:resource_lang  => resource['link'][1]['href'].split("hl=").last.gsub(/\_.*/, "")
         }
       end
     end
@@ -68,31 +67,31 @@ module Interpres
       end
     end  
     
-    class Folder < Interpres::Google::Resource
-      def initialize
-        super
-      end
-      
-      def title(resource_id)
-        url = "#{BASE_URLS[:fetch]}#{resource_id}"
-        params = { 'alt' => 'json' }
-        JSON.parse(Nestful.send(:get, url, :headers => @@headers, :params => params))['entry']['title']['$t']
-      end
-      
-      def contents(resource_id)
-        url = "#{BASE_URLS[:fetch]}#{resource_id}/contents"
-        params = { 'alt' => 'json' }
-        output = { :title => title(resource_id), :entry => [] }
-        contents = JSON.parse(Nestful.send(:get, url, :headers => @@headers, :params => params))['feed']['entry']
-        contents.each do |entry| 
-          output[:entry] << 
-          { 
-            :resource_id => entry["gd$resourceId"]['$t'].split(":").last, 
-            :title => entry["title"]['$t']
-          }
-        end
-        output
-      end
-    end
+#    class Folder < Interpres::Google::Resource
+#      def initialize
+#        super
+#      end
+#      
+#      def title(resource_id)
+#        url = "#{BASE_URLS[:fetch]}#{resource_id}"
+#        params = { 'alt' => 'json' }
+#        JSON.parse(Nestful.send(:get, url, :headers => @@headers, :params => params))['entry']['title']['$t']
+#      end
+#      
+#      def contents(resource_id)
+#        url = "#{BASE_URLS[:fetch]}#{resource_id}/contents"
+#        params = { 'alt' => 'json' }
+#        output = { :title => title(resource_id), :entry => [] }
+#        contents = JSON.parse(Nestful.send(:get, url, :headers => @@headers, :params => params))['feed']['entry']
+#        contents.each do |entry| 
+#          output[:entry] << 
+#          { 
+#            :resource_id => entry["gd$resourceId"]['$t'].split(":").last, 
+#            :title => entry["title"]['$t']
+#          }
+#        end
+#        output
+#      end
+#    end
   end
 end

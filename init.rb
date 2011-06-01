@@ -58,21 +58,21 @@ module Interpres
       end
     end
     
-    get '/resources/folders/:resource_id/contents' do
-      begin
-        response = Interpres::Google::Folder.new.contents(params[:resource_id]).to_json
-        callback = params.delete('callback')
-        if callback
-          content_type :js
-          "#{callback}(#{response})" 
-        else
-          response  
-        end
-      rescue => e
-        HoptoadNotifier.notify e
-        error 500, e.message.to_json
-      end
-    end
+    #get '/resources/folders/:resource_id/contents' do
+    #  begin
+    #    response = Interpres::Google::Folder.new.contents(params[:resource_id]).to_json
+    #    callback = params.delete('callback')
+    #    if callback
+    #      content_type :js
+    #      "#{callback}(#{response})" 
+    #    else
+    #      response  
+    #    end
+    #  rescue => e
+    #    HoptoadNotifier.notify e
+    #    error 500, e.message.to_json
+    #  end
+    #end
     
     post '/resources' do
       begin
