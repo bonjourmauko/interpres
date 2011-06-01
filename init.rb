@@ -36,7 +36,7 @@ module Interpres
     get '/resource/document/:id/download' do
       begin
         content_type :json
-        params.to_json
+        {:hola => 'pene'}.to_json
       rescue => e
         content_type :json
         HoptoadNotifier.notify e
