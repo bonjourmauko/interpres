@@ -33,7 +33,7 @@ module Interpres
     #  end
     #end
     
-    get '/documents/:resource_id/download' do
+    get '/resources/documents/:resource_id/download' do
       begin
         response = Interpres::Google::Document.new.download(params[:resource_id]).to_json
         callback = params.delete('callback')
@@ -49,7 +49,7 @@ module Interpres
       end
     end
     
-    get '/folders/:resource_id/contents' do
+    get '/resources/folders/:resource_id/contents' do
       begin
         response = Interpres::Google::Folder.new.contents(params[:resource_id]).to_json
         callback = params.delete('callback')
@@ -65,17 +65,17 @@ module Interpres
       end
     end
     
-    #post '/emails' do
-    #  begin
-    #    req = Interpres::Sendgrid::ParseApi.new params
-    #    #Email.create!(:from => req.from, :href => req.href).to_json
+    post '/resources' do
+      begin
+        response = Interpres::Sendgrid::ParseApi.new params
+        Resource.create!(:resource_id => response.resource_id).to_json
     #    resp = Interpress::Google::Document.new.retrieve(req.href).to_json
     #    Nestful.send(:post, "/path/to/tapir", :params => resp)
-    #  rescue => e
-    #    HoptoadNotifier.notify e
-    #    error 500, e.message.to_json
-    #  end
-    #end
+      rescue => e
+        HoptoadNotifier.notify e
+        error 500, e.message.to_json
+      end
+    end
         
   end
 end
