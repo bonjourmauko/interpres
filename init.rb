@@ -33,7 +33,7 @@ module Interpres
     #  end
     #end
     
-    get '/document/:resource_id/download' do
+    get '/documents/:resource_id/download' do
       begin
         response = Interpres::Google::Document.new.download(params[:resource_id]).to_json
         callback = params.delete('callback')
@@ -49,7 +49,7 @@ module Interpres
       end
     end
     
-    get '/folder/:resource_id/contents' do
+    get '/folders/:resource_id/contents' do
       begin
         response = Interpres::Google::Folder.new.contents(params[:resource_id]).to_json
         callback = params.delete('callback')
