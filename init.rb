@@ -33,7 +33,7 @@ module Interpres
     #  end
     #end
     
-    get '/resource/document/:id/download' do
+    get '/document/download/:id' do
       begin
         content_type :json
         {:hola => 'pene'}.to_json
@@ -44,7 +44,7 @@ module Interpres
       end
     end
     
-    get '/resource/folder/:id/contents' do
+    get '/collection/contents/:id' do
       begin
         content_type :json
         params.to_json
