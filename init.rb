@@ -2,7 +2,7 @@ require 'yajl/json_gem'
 require 'sinatra/activerecord'
 require 'models/email'
 require 'sendgrid'
-require 'google_docs'
+require 'google'
 
 module Interpres  
   class Init < Sinatra::Base
@@ -33,7 +33,7 @@ module Interpres
     #  end
     #end
     
-    get '/document/download/:id' do
+    get '/document/:id/download' do
       begin
         content_type :json
         {:hola => 'pene'}.to_json
@@ -44,7 +44,7 @@ module Interpres
       end
     end
     
-    get '/collection/contents/:id' do
+    get '/collection/:id/contents' do
       begin
         content_type :json
         params.to_json
