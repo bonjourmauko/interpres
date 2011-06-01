@@ -17,9 +17,9 @@ module Interpres
     mime_type :js,   'text/javascript'
     
     
-    #before do
-    #  content_type :json
-    #end
+    before do
+      content_type :json
+    end
     
     #get '/emails' do
     #  Email.all.to_json
@@ -33,7 +33,23 @@ module Interpres
     #  end
     #end
     
-    get '/document/:id/download' do
+    get '/document/:resource_id/download' do
+      begin
+        response = Interpres::Google::Document.new.download(params[:resource_id]).to_json
+        callback = params.delete('callback')
+        if callback
+          content_type :js
+          "#{callback}(#{response})" 
+        else
+          response  
+        end
+      rescue => e
+        HoptoadNotifier.notify e
+        error 500, e.message.to_json
+      end
+    end
+    
+    get '/collection/:resource_id/contents' do
       begin
         callback = params.delete('callback')
         if callback
@@ -43,17 +59,6 @@ module Interpres
           content_type :json
           return params.to_json
         end
-      rescue => e
-        content_type :json
-        HoptoadNotifier.notify e
-        error 500, e.message.to_json
-      end
-    end
-    
-    get '/collection/:id/contents' do
-      begin
-        content_type :json
-        params.to_json
       rescue => e
         content_type :json
         HoptoadNotifier.notify e
