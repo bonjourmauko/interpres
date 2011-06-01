@@ -36,20 +36,20 @@ module Interpres
         response.strip.to_a.last.split("=").last
       end
       
-      #def retrieve(resource_id)
-      #  url = URLS[:retrieve] + id
-      #  params = { 'alt' => 'json' }
-      #  response = Nestful.send(:get, url, :headers => @@headers, :params => params)
-      #  resource = JSON.parse(@resource_type == 'document' ? response['entry'] : response['feed']['entry'][0])
-      #  output = {
-      #    :user_name      => resource['author'].first['name']['$t'],
-      #    :user_email     => resource['author'].first['email']['$t'],
-      #    :resource_id    => @resource_id,
-      #    :resource_type  => @resource_type,
-      #    :resource_title => resource['title']['$t'],
-      #    :resource_lang  => resource['link'][1]['href'].split("hl=").last.gsub(/\_.*/, "")
-      #  }
-      #end
+      def retrieve(resource_id)
+        url = BASE_URLS[:fetch] + id
+        params = { 'alt' => 'json' }
+        response = Nestful.send(:get, url, :headers => @@headers, :params => params)
+        resource = JSON.parse(response['feed']['entry'][0] ? response['feed']['entry'][0] : response['entry'])
+        output = {
+          :user_name      => resource['author'].first['name']['$t'],
+          :user_email     => resource['author'].first['email']['$t'],
+          :resource_id    => resource['gd$resourceId']['$t'].split(":").last,
+          :resource_type  => resource['gd$resourceId']['$t'].split(":").first, # document or folder
+          :resource_title => resource['title']['$t'],
+          :resource_lang  => resource['link'][1]['href'].split("hl=").last.gsub(/\_.*/, "")
+        }
+      end
     end
     
     class Document < Interpres::Google::Resource

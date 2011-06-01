@@ -3,6 +3,7 @@ require 'sinatra/activerecord'
 require 'models/resource'
 require 'sendgrid'
 require 'google'
+require 'tapir'
 
 module Interpres  
   class Init < Sinatra::Base
@@ -77,8 +78,7 @@ module Interpres
       begin
         response = Interpres::Sendgrid::ParseEmail.new params
         Resource.create!(:resource_id => response.resource_id).to_json
-    #    resp = Interpress::Google::Document.new.retrieve(req.href).to_json
-    #    Nestful.send(:post, "/path/to/tapir", :params => resp)
+        Interpres::Tapir.send_source Interpres::Google::Resource.new.retrieve(response.resource_id).to_json
       rescue => e
         HoptoadNotifier.notify e
         error 500, e.message.to_json
