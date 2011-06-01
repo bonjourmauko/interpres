@@ -47,7 +47,7 @@ module Interpres
           #end
           pene << a['href']
         end
-        pene = pene.scan(/^.*[\/|\.|\?|\=]([a-z0-9\-\_]{44,})[\/|\&|\=].*$/i)
+        pene = pene.to_s.scan(/^.*[\/|\.|\?|\=]([a-z0-9\-\_]{44,})[\/|\&|\=].*$/i)
         return pene.to_s unless pene.empty?
         return 'q wea'
         nil
