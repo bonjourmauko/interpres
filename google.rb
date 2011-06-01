@@ -37,7 +37,7 @@ module Interpres
       end
       
       def retrieve(resource_id)
-        url = BASE_URLS[:fetch] + id
+        url = BASE_URLS[:fetch] + resource_id
         params = { 'alt' => 'json' }
         response = Nestful.send(:get, url, :headers => @@headers, :params => params)
         resource = JSON.parse(response['feed']['entry'][0] ? response['feed']['entry'][0] : response['entry'])
