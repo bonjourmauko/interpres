@@ -1,6 +1,6 @@
 require 'yajl/json_gem'
 require 'sinatra/activerecord'
-require 'models/email'
+require 'models/resource'
 require 'sendgrid'
 require 'google'
 
