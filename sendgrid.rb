@@ -38,16 +38,16 @@ module Interpres
       def resource_id
         content = Nokogiri::HTML @html
         
-        content = []
+        pene = []
         
         content.css('a').each do |a|
           #resource_id = a['href'].scan(/^.*[\/|\.|\?|\=]([a-z0-9\-\_]{44,})[\/|\&|\=].*$/i)
           #unless resource_id.empty?
           #  resource_id[0][0]
           #end
-          content << a['href']
+          pene << a['href']
         end
-        return content.to_s
+        return pene.to_s
         nil
       end
     
