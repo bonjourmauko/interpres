@@ -21,17 +21,25 @@ module Interpres
       content_type :json
     end
     
-    #get '/emails' do
-    #  Email.all.to_json
-    #end
+    get '/resources' do
+      Resource.all.to_json
+    end
     
-    #get '/emails/:id' do
-    #  begin
-    #    Email.find(params[:id]).to_json
-    #  rescue => e
-    #    error 500, e.message.to_json
-    #  end
-    #end
+    get '/resources/:id' do
+      begin
+        Resource.find(params[:id]).to_json
+      rescue => e
+        error 500, e.message.to_json
+      end
+    end
+    
+    get '/resources/:resource_id' do
+      begin
+        Resource.find(params[:resource_id]).to_json
+      rescue => e
+        error 500, e.message.to_json
+      end
+    end
     
     get '/resources/documents/:resource_id/download' do
       begin
