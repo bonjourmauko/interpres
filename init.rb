@@ -78,7 +78,7 @@ module Interpres
       begin
         response = Interpres::Sendgrid::ParseEmail.new params
         Resource.create!(:resource_id => response.resource_id).to_json
-        Interpres::Tapir.send_source Interpres::Google::Resource.new.retrieve(response.resource_id).to_json
+        Interpres::Tapir.send_source Interpres::Google::Resource.new.retrieve(response.resource_id)
       rescue => e
         HoptoadNotifier.notify e
         error 500, e.message.to_json
