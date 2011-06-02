@@ -17,8 +17,8 @@ module Interpres
         file << body
         file.flush
         
-        container = @connection.create_container premaster_id
-        object = container.create_object 'premaster.html'
+        container = @connection.container 'premaster'
+        object = container.create_object "#{premaster_id}"
         object.write file
         
         file = nil
@@ -31,8 +31,8 @@ module Interpres
       end
       
       def premaster(premaster_id)
-        container = @connection.container premaster_id
-        object = container.object 'premaster.html'
+        container = @connection.container 'premaster'
+        object = container.object "#{premaster_id}"
         output = { :body => object.data }
       end
     end

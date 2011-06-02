@@ -24,7 +24,7 @@ module Interpres
     #    response['Access-Control-Allow-Origin'] = '*'
     #    response['Access-Control-Allow-Methods'] = 'POST, GET, OPTIONS' 
     #  end
-    #end
+    # end
     
     mime_type :json, 'application/json'
     mime_type :js,   'text/javascript'
