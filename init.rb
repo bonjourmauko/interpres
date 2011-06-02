@@ -1,9 +1,11 @@
+require 'tempfile'
 require 'yajl/json_gem'
 require 'sinatra/activerecord'
 require 'models/resource'
 require 'sendgrid'
 require 'google'
 require 'tapir'
+require 'storage'
 
 module Interpres  
   class Init < Sinatra::Base
@@ -74,11 +76,37 @@ module Interpres
     #  end
     #end
     
+    get '/resources/books/premaster/:premaster_id' do
+      begin
+        response = Interpres::Storage::Download.new.premaster(params[:premaster_id]).to_json
+        callback = params.delete('callback')
+        if callback
+          content_type :js
+          "#{callback}(#{response})" 
+        else
+          response  
+        end        
+      rescue => e
+        HoptoadNotifier.notify e
+        error 500, e.message.to_json
+      end   
+    
+    end
+    
     post '/resources' do
       begin
         response = Interpres::Sendgrid::ParseEmail.new params
         Resource.create!(:resource_id => response.resource_id)
         Interpres::Tapir.send_source(Interpres::Google::Resource.new.retrieve(response.resource_id)).to_json
+      rescue => e
+        HoptoadNotifier.notify e
+        error 500, e.message.to_json
+      end
+    end
+    
+    post '/resources/books/premaster' do
+      begin
+        Interpres::Storage::Upload.new.premaster(params[:premaster_id], params[:body])
       rescue => e
         HoptoadNotifier.notify e
         error 500, e.message.to_json
