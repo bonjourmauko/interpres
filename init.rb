@@ -14,6 +14,12 @@ module Interpres
       env = ENV['SINATRA_ENV'] || 'development'
       databases = YAML.load_file('config/database.yml')
       ActiveRecord::Base.establish_connection(databases[env])
+      class << Sinatra::Base
+        def options(path, opts={}, &block)
+          route 'OPTIONS', path, opts, &block
+        end
+      end
+      Sinatra::Delegator.delegate :options
     end
     
     mime_type :json, 'application/json'
@@ -90,7 +96,6 @@ module Interpres
         HoptoadNotifier.notify e
         error 500, e.message.to_json
       end   
-    
     end
     
     post '/resources' do
@@ -102,6 +107,11 @@ module Interpres
         HoptoadNotifier.notify e
         error 500, e.message.to_json
       end
+    end
+    
+    options '/resources/books/premaster' do
+      response.headers["Access-Control-Allow-Origin"] = "*"
+      response.headers["Access-Control-Allow-Methods"] = "POST"
     end
     
     post '/resources/books/premaster' do
