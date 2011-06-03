@@ -121,6 +121,16 @@ module Interpres
         error 500, e.message.to_json
       end
     end
+    
+    post '/assets/image/transload' do
+      begin
+        file = Interpres::Storage::Download.new.image(params[:original_url])
+        Interpres::Storage::Upload.new.image(params[:container], params[:path], file).to_json
+      rescue => e
+        HoptoadNotifier.notify e
+        error 500, e.message.to_json
+      end
+    end
         
   end
 end

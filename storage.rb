@@ -23,6 +23,12 @@ module Interpres
         
         file = nil
       end
+      
+      def image(container_, path, file)
+        container = @connection.create_container "#{container_}"
+        object = container.create_object "#{path}"
+        object.write file
+      end
     end
     
     class Download < Interpres::Storage::Connection
@@ -34,6 +40,10 @@ module Interpres
         container = @connection.container 'premaster'
         object = container.object "#{premaster_id}"
         output = { :body => object.data }
+      end
+      
+      def image(original_url)
+        Nestful.send(:get, "#{original_url}", :buffer => true)
       end
     end
     
