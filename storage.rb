@@ -20,8 +20,6 @@ module Interpres
         container = @connection.container 'premaster'
         object = container.create_object "#{premaster_id}"
         object.write file
-        
-        file = nil
       end
       
       def image(container_, path, file)
