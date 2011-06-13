@@ -10,10 +10,10 @@ require 'storage'
 module Interpres  
   class Init < Sinatra::Base
     
-    #configure do
-    #  env = ENV['SINATRA_ENV'] || 'development'
-    #  databases = YAML.load_file('config/database.yml')
-    #  ActiveRecord::Base.establish_connection(databases[env])
+    configure do
+      env = ENV['SINATRA_ENV'] || 'development'
+      databases = YAML.load_file('config/database.yml')
+      ActiveRecord::Base.establish_connection(databases[env])
     #  class << Sinatra::Base
     #    def http_options path,opts={}, &blk
     #      route 'OPTIONS', path, opts, &blk
@@ -24,7 +24,7 @@ module Interpres
     #    response['Access-Control-Allow-Origin'] = '*'
     #    response['Access-Control-Allow-Methods'] = 'POST, GET, OPTIONS' 
     #  end
-    # end
+    end
     
     mime_type :json, 'application/json'
     mime_type :js,   'text/javascript'
