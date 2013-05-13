@@ -1,0 +1,6 @@
+client_login:
+  email:        asdfasdf
+  password:     asdfasdf
+  source:       interpres
+  service:      writely
+  account_type: HOSTED_OR_GOOGLE

@@ -1,0 +1,19 @@
+development:
+  adapter: mysql2
+  encoding: utf8
+  reconnect: false
+  database: sendgrid_parse_development
+  pool: 5
+  username: asdfasdf
+  password:
+  socket:
+
+production:
+  adapter: mysql2
+  encoding: utf8
+  reconnect: false
+  database: sendgrid_parse_production
+  pool: 5
+  username: asdfasdf
+  password:
+  socket:
